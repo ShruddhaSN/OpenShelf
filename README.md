@@ -19,3 +19,5 @@ OpenShelf is a full-stack digital library platform built with Django and React.
 
 ## Status
 🚧 Actively under development
+
+> Note: UI is currently minimal and focused on functionality. UI/UX improvements are planned.
