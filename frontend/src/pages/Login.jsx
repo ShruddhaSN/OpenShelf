@@ -1,24 +1,22 @@
 import { useState } from "react";
 import { login } from "../api/auth";
 
-function Login() {
+function Login({ setLoggedIn }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // 🔴 VERY IMPORTANT
     setError("");
 
     try {
       const data = await login(username, password);
-      console.log("JWT tokens:", data);
 
-      // TEMP: store tokens (we'll improve this later)
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
 
-      alert("Login successful!");
+      setLoggedIn(true); // 🔥 UI updates instantly
     } catch (err) {
       setError("Invalid username or password");
     }
