@@ -1,7 +1,9 @@
+import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import BooksList from "./components/BooksList";
 import Login from "./pages/Login";
 import LogoutButton from "./components/LogoutButton";
+import BookDetail from "./pages/BookDetail";
 import { isAuthenticated } from "./utils/auth";
 
 function App() {
@@ -15,7 +17,11 @@ function App() {
       {loggedIn ? (
         <>
           <LogoutButton setLoggedIn={setLoggedIn} />
-          <BooksList />
+
+          <Routes>
+            <Route path="/" element={<BooksList />} />
+            <Route path="/books/:id" element={<BookDetail />} />
+          </Routes>
         </>
       ) : (
         <Login setLoggedIn={setLoggedIn} />

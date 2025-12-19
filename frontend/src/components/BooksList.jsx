@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchBooks } from "../api/books";
+import { Link } from "react-router-dom";
 
 function BooksList() {
   const [books, setBooks] = useState([]);
@@ -33,8 +34,10 @@ function BooksList() {
         <ul>
           {books.map((book) => (
             <li key={book.id}>
+            <Link to={`/books/${book.id}`}>
               <strong>{book.title}</strong> — {book.author}
-            </li>
+            </Link>
+          </li>
           ))}
         </ul>
       )}
