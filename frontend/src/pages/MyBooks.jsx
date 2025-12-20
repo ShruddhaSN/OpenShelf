@@ -44,15 +44,13 @@ function MyBooks() {
           {books.length === 0 ? (
             <p>No books</p>
           ) : (
-            <ul>
-              {books.map((book) => (
-                <li key={book.id}>
-                  <Link to={`/books/${book.id}`}>
-                    {book.title} — {book.author}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                {books.map((book) => (
+                    <Link key={book.id} to={`/books/${book.id}`}>
+                    {book.title}
+                    </Link>
+                ))}
+            </div>
           )}
         </div>
       ))}

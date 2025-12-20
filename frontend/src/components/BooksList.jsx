@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchBooks } from "../api/books";
 import { Link } from "react-router-dom";
+import BookCard from "./BookCard";
 
 function BooksList() {
   const [books, setBooks] = useState([]);
@@ -31,15 +32,11 @@ function BooksList() {
       {books.length === 0 ? (
         <p>No books found.</p>
       ) : (
-        <ul>
+        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
           {books.map((book) => (
-            <li key={book.id}>
-            <Link to={`/books/${book.id}`}>
-              <strong>{book.title}</strong> — {book.author}
-            </Link>
-          </li>
+            <BookCard key={book.id} book={book} />
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

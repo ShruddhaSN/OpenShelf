@@ -6,6 +6,7 @@ import LogoutButton from "./components/LogoutButton";
 import BookDetail from "./pages/BookDetail";
 import { isAuthenticated } from "./utils/auth";
 import MyBooks from "./pages/MyBooks";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(isAuthenticated());
@@ -17,9 +18,7 @@ function App() {
 
       {loggedIn ? (
         <>
-          <LogoutButton setLoggedIn={setLoggedIn} />
-          <Link to="/my-books">My Books</Link>
-
+          <Navbar setLoggedIn={setLoggedIn} />
           <Routes>
             <Route path="/" element={<BooksList />} />
             <Route path="/books/:id" element={<BookDetail />} />
@@ -29,6 +28,7 @@ function App() {
       ) : (
         <Login setLoggedIn={setLoggedIn} />
       )}
+
     </div>
   );
 }
