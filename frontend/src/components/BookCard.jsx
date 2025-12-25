@@ -2,20 +2,27 @@ import { Link } from "react-router-dom";
 
 function BookCard({ book }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "1rem",
-        width: "250px",
-      }}
-    >
-      <h3 style={{ marginBottom: "0.5rem" }}>{book.title}</h3>
-      <p style={{ fontSize: "0.9rem", color: "#555" }}>
+    <div className="
+        bg-white
+        rounded-xl
+        border border-gray-200
+        shadow-md
+        hover:shadow-lg
+        hover:-translate-y-1
+        transition
+        p-5        
+      ">
+        
+      <h3 style={{ marginBottom: "0.25rem" }}>{book.title}</h3>
+      <p style={{ fontSize: "0.85rem", color: "#666" }}>
         {book.author}
       </p>
 
-      <Link to={`/books/${book.id}`}>View details</Link>
+
+      <Link
+        to={`/books/${book.id}`}
+        className="text-indigo-600 text-sm font-medium hover:underline cursor-pointer"
+      >View details</Link>
     </div>
   );
 }

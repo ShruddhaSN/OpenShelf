@@ -27,19 +27,23 @@ function BooksList() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
-      <h2>Available Books</h2>
-      {books.length === 0 ? (
-        <p>No books found.</p>
-      ) : (
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-          {books.map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  <div>
+    <h2 className="text-2xl font-semibold mb-6">
+      Available Books
+    </h2>
+
+    {books.length === 0 ? (
+      <p className="text-gray-500">No books found.</p>
+    ) : (
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {books.map((book) => (
+          <BookCard key={book.id} book={book} />
+        ))}
+      </div>
+    )}
+  </div>
+);
+
 }
 
 export default BooksList;
