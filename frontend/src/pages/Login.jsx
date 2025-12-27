@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { login } from "../api/auth";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login({ setLoggedIn }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,7 +16,9 @@ export default function Login({ setLoggedIn }) {
       const data = await login(username, password);
       localStorage.setItem("access", data.access);
       localStorage.setItem("refresh", data.refresh);
+
       setLoggedIn(true);
+      navigate("/"); // ✅ IMPORTANT
     } catch {
       setError("Invalid username or password");
     }
@@ -23,7 +27,6 @@ export default function Login({ setLoggedIn }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        {/* Logo / Title */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-indigo-700">
             OpenShelf 📚
@@ -33,7 +36,6 @@ export default function Login({ setLoggedIn }) {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-600">
@@ -63,22 +65,24 @@ export default function Login({ setLoggedIn }) {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-indigo-600 py-2.5 text-white font-semibold hover:bg-indigo-700 transition duration-200"
-          >
+          <button className="w-full bg-indigo-600 text-white py-2 rounded-lg">
             Login
           </button>
         </form>
 
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-indigo-600 font-medium">
+            Register
+          </Link>
+        </p>
         {/* Footer */}
         <p className="text-xs text-gray-400 text-center mt-6">
           © {new Date().getFullYear()} OpenShelf
         </p>
+
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
 from rest_framework import generics
 from django.contrib.auth.models import User
 from .models import Book, UserBookStatus
-from .serializers import BookSerializer, UserBookStatusSerializer
-from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from .serializers import BookSerializer, UserBookStatusSerializer, RegisterSerializer
+from rest_framework.permissions import IsAuthenticated,IsAdminUser, AllowAny
 from rest_framework.response import Response
 from rest_framework import status as http_status
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 class BookListView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
@@ -14,7 +16,6 @@ class BookListView(generics.ListCreateAPIView):
         if self.request.method == "POST":
             return [IsAdminUser()]
         return []
-
 
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
@@ -52,3 +53,23 @@ class UpdateReadingStatusView(generics.CreateAPIView):
 
         serializer = self.get_serializer(obj)
         return Response(serializer.data)
+    
+class RegisterView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "username": user.username,
+            },
+            status=http_status.HTTP_201_CREATED,
+        )

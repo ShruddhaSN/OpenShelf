@@ -9,53 +9,53 @@ function BookDetail() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-  const loadBook = async () => {
-    try {
-      // Load book
-      const response = await api.get(`books/${id}/`);
-      setBook(response.data);
+    const loadBook = async () => {
+      try {
+        // Load book
+        const response = await api.get(`books/${id}/`);
+        setBook(response.data);
 
-      // Load user's reading status
-      const statusRes = await api.get("my-books/");
-      const existing = statusRes.data.find(
-        (item) => item.book.id === response.data.id
-      );
+        // Load user's reading status
+        const statusRes = await api.get("my-books/");
+        const existing = statusRes.data.find(
+          (item) => item.book.id === response.data.id
+        );
 
-      if (existing) {
-        setStatus(existing.status);
-      } else {
-        setStatus(null);
+        if (existing) {
+          setStatus(existing.status);
+        } else {
+          setStatus(null);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load book details");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load book details");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  loadBook();
-}, [id]);
+    loadBook();
+  }, [id]);
 
   const updateStatus = async (newStatus) => {
-  try {
-    setSaving(true);
+    try {
+      setSaving(true);
 
-    const res = await api.post("reading-status/", {
-      book: book.id,
-      status: newStatus,
-    });
+      const res = await api.post("reading-status/", {
+        book: book.id,
+        status: newStatus,
+      });
 
-    setStatus(res.data.status);
-  } catch (err) {
-    console.error(
-      "Failed to update status",
-      err.response?.data || err
-    );
-  } finally {
-    setSaving(false);
-  }
-};
+      setStatus(res.data.status);
+    } catch (err) {
+      console.error(
+        "Failed to update status",
+        err.response?.data || err
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
 
 
@@ -63,8 +63,20 @@ function BookDetail() {
   const [status, setStatus] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  if (loading) return <p>Loading book...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading)
+    return (
+      <div className="text-center text-gray-500 mt-20">
+        Loading book details...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="text-center text-red-500 mt-20">
+        {error}
+      </div>
+    );
+
   if (!book) return <p>Book not found.</p>;
 
   return (
@@ -94,30 +106,37 @@ function BookDetail() {
             {book.description}
           </p>
         )}
-        <div className="flex gap-3 mt-6 py-2">
-  {["reading", "read", "not_read"].map((s) => {
-    const isActive = status === s;
+        <p className="text-sm font-medium text-gray-500 mb-2">
+          Reading status
+        </p>
 
-    return (
-      <button
-        key={s}
-        onClick={() => updateStatus(s)}
-        disabled={saving}
-        className={`px-4 py-2 rounded-md text-sm font-medium transition ${
-          isActive
-            ? s === "read"
-              ? "bg-green-600 text-white"
-              : s === "reading"
-              ? "bg-yellow-500 text-white"
-              : "bg-gray-500 text-white"
-            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-        }`}
-      >
-        {s.replace("_", " ")}
-      </button>
-    );
-  })}
-</div>
+        <div className="flex gap-3 mt-1">
+          {["reading", "read", "not_read"].map((s) => {
+            const isActive = status === s;
+
+
+            return (
+              <button
+                key={s}
+                onClick={() => updateStatus(s)}
+                disabled={saving}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition
+  ${isActive
+                    ? s === "read"
+                      ? "bg-green-600 text-white ring-2 ring-green-300"
+                      : s === "reading"
+                        ? "bg-yellow-500 text-white ring-2 ring-yellow-300"
+                        : "bg-gray-500 text-white ring-2 ring-gray-300"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }
+`}
+
+              >
+                {s.replace("_", " ")}
+              </button>
+            );
+          })}
+        </div>
 
 
 
@@ -126,10 +145,11 @@ function BookDetail() {
             href={book.pdf}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition mt-6"
           >
-            Read PDF
+            📖 Read PDF
           </a>
+
         )}
       </div>
     </div>
